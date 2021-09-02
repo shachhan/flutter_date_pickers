@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     DaysPickerPage(),
     WeekPickerPage(events: events,),
     RangePickerPage(events: events,),
-    MonthPickerPage()
+    MonthPickerPage(),
   ];
 
   @override

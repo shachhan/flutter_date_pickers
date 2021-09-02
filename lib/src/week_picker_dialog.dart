@@ -12,33 +12,7 @@ import 'i_selectable_picker.dart';
 import 'layout_settings.dart';
 import 'typedefs.dart';
 
-/// Date picker for selection a week.
-class WeekPicker extends StatelessWidget {
-  /// Creates a month picker.
-  WeekPicker(
-      {Key? key,
-      required this.selectedDate,
-      required this.onChanged,
-      required this.firstDate,
-      required this.lastDate,
-      this.initiallyShowDate,
-      this.datePickerLayoutSettings = const DatePickerLayoutSettings(),
-      this.datePickerStyles,
-      this.datePickerKeys,
-      this.selectableDayPredicate,
-      this.onSelectionError,
-      this.eventDecorationBuilder,
-      this.onMonthChanged})
-      : assert(!firstDate.isAfter(lastDate)),
-        assert(!lastDate.isBefore(firstDate)),
-        assert(!selectedDate.isBefore(firstDate)),
-        assert(!selectedDate.isAfter(lastDate)),
-        assert(initiallyShowDate == null
-            || !initiallyShowDate.isAfter(lastDate)),
-        assert(initiallyShowDate == null
-            || !initiallyShowDate.isBefore(firstDate)),
-        super(key: key);
-
+class WeekPicker1 extends StatefulWidget {
   /// The currently selected date.
   ///
   /// This date is highlighted in the picker.
@@ -86,32 +60,65 @@ class WeekPicker extends StatelessWidget {
   /// New DateTime object represents first day of new month and 00:00 time.
   final ValueChanged<DateTime>? onMonthChanged;
 
+  /// Creates a month picker.
+  WeekPicker1(
+      {Key? key,
+        required this.selectedDate,
+        required this.onChanged,
+        required this.firstDate,
+        required this.lastDate,
+        this.initiallyShowDate,
+        this.datePickerLayoutSettings = const DatePickerLayoutSettings(),
+        this.datePickerStyles,
+        this.datePickerKeys,
+        this.selectableDayPredicate,
+        this.onSelectionError,
+        this.eventDecorationBuilder,
+        this.onMonthChanged})
+      : assert(!firstDate.isAfter(lastDate)),
+        assert(!lastDate.isBefore(firstDate)),
+        assert(!selectedDate.isBefore(firstDate)),
+        assert(!selectedDate.isAfter(lastDate)),
+        assert(initiallyShowDate == null
+            || !initiallyShowDate.isAfter(lastDate)),
+        assert(initiallyShowDate == null
+            || !initiallyShowDate.isBefore(firstDate)),
+        super(key: key);
+
+
+
+  @override
+  _WeekPicker1State createState() => _WeekPicker1State();
+}
+
+class _WeekPicker1State extends State<WeekPicker1> {
   @override
   Widget build(BuildContext context) {
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
 
-    int firstDayOfWeekIndex = datePickerStyles?.firstDayOfeWeekIndex ??
+    int firstDayOfWeekIndex = widget.datePickerStyles?.firstDayOfeWeekIndex ??
         localizations.firstDayOfWeekIndex;
 
     ISelectablePicker<DatePeriod> weekSelectablePicker = WeekSelectable(
-        selectedDate, firstDayOfWeekIndex, firstDate, lastDate,
-        selectableDayPredicate: selectableDayPredicate);
+        widget.selectedDate, firstDayOfWeekIndex,
+        widget.firstDate, widget.lastDate,
+        selectableDayPredicate: widget.selectableDayPredicate);
 
     return DayBasedChangeablePicker<DatePeriod>(
       selectablePicker: weekSelectablePicker,
       // todo: maybe create selection for week
       // todo: and change logic here to work with it
-      selection: DayPickerSingleSelection(selectedDate),
-      firstDate: firstDate,
-      lastDate: lastDate,
-      initiallyShownDate: initiallyShowDate,
-      onChanged: onChanged,
-      onSelectionError: onSelectionError,
-      datePickerLayoutSettings: datePickerLayoutSettings,
-      datePickerStyles: datePickerStyles ?? DatePickerRangeStyles(),
-      datePickerKeys: datePickerKeys,
-      eventDecorationBuilder: eventDecorationBuilder,
-      onMonthChanged: onMonthChanged,
+      selection: DayPickerSingleSelection(widget.selectedDate),
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
+      initiallyShownDate: widget.initiallyShowDate,
+      onChanged: widget.onChanged,
+      onSelectionError: widget.onSelectionError,
+      datePickerLayoutSettings: widget.datePickerLayoutSettings,
+      datePickerStyles: widget.datePickerStyles ?? DatePickerRangeStyles(),
+      datePickerKeys: widget.datePickerKeys,
+      eventDecorationBuilder: widget.eventDecorationBuilder,
+      onMonthChanged: widget.onMonthChanged,
     );
   }
 }

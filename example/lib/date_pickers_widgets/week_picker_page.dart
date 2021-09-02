@@ -11,10 +11,7 @@ class WeekPickerPage extends StatefulWidget {
   final List<Event> events;
 
   ///
-  const WeekPickerPage({
-    Key? key,
-    this.events = const []
-  }) : super(key: key);
+  const WeekPickerPage({Key? key, this.events = const []}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _WeekPickerPageState();
@@ -58,93 +55,123 @@ class _WeekPickerPageState extends State<WeekPickerPage> {
           color: selectedPeriodMiddleColor, shape: BoxShape.rectangle),
     );
 
-    return Flex(
-      direction: MediaQuery.of(context).orientation == Orientation.portrait
-          ? Axis.vertical
-          : Axis.horizontal,
-      children: <Widget>[
-        Expanded(
-          child: WeekPicker(
-            selectedDate: _selectedDate,
-            onChanged: _onSelectedDateChanged,
-            firstDate: _firstDate,
-            lastDate: _lastDate,
-            datePickerStyles: styles,
-            onSelectionError: _onSelectionError,
-            selectableDayPredicate: _isSelectableCustom,
-            eventDecorationBuilder: _eventDecorationBuilder,
-          ),
-        ),
-        Container(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  "Selected date styles",
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                _stylesBlock(),
-                _selectedBlock()
-              ],
+    return Column(
+      children: [
+        Flex(
+          direction: MediaQuery.of(context).orientation == Orientation.portrait
+              ? Axis.vertical
+              : Axis.horizontal,
+          children: <Widget>[
+            Expanded(
+              child: WeekPicker(
+                selectedDate: _selectedDate,
+                onChanged: _onSelectedDateChanged,
+                firstDate: _firstDate,
+                lastDate: _lastDate,
+                datePickerStyles: styles,
+                onSelectionError: _onSelectionError,
+                selectableDayPredicate: _isSelectableCustom,
+                eventDecorationBuilder: _eventDecorationBuilder,
+              ),
             ),
-          ),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0, vertical: 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Selected date styles",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                    _stylesBlock(),
+                    _selectedBlock()
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
+        ElevatedButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                  title: Text('Week Picker Dia'),
+                  content: WeekPicker1(
+                    selectedDate: _selectedDate,
+                    firstDate: _firstDate,
+                    lastDate: _lastDate,
+                    datePickerStyles: styles,
+                    onChanged: _onSelectedDateChanged,
+                  ),
+                  actions: [
+                    TextButton(
+                        onPressed: () => Navigator.pop(context, _selectedDate),
+                        child: Text('ok'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, null),
+                      child: Text('cancel'),
+                    ),
+                  ],
+                ));
+        },
+        child: Text('Week Picker Dialog')),
       ],
     );
   }
 
   // block witt color buttons insede
   Widget _stylesBlock() => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ColorSelectorBtn(
-              title: "Start",
-              color: selectedPeriodStartColor,
-              showDialogFunction: _showSelectedStartColorDialog),
-          SizedBox(
-            width: 12.0,
-          ),
-          ColorSelectorBtn(
-              title: "Middle",
-              color: selectedPeriodMiddleColor,
-              showDialogFunction: _showSelectedMiddleColorDialog),
-          SizedBox(
-            width: 12.0,
-          ),
-          ColorSelectorBtn(
-              title: "End",
-              color: selectedPeriodLastColor,
-              showDialogFunction: _showSelectedEndColorDialog),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ColorSelectorBtn(
+                title: "Start",
+                color: selectedPeriodStartColor,
+                showDialogFunction: _showSelectedStartColorDialog),
+            SizedBox(
+              width: 12.0,
+            ),
+            ColorSelectorBtn(
+                title: "Middle",
+                color: selectedPeriodMiddleColor,
+                showDialogFunction: _showSelectedMiddleColorDialog),
+            SizedBox(
+              width: 12.0,
+            ),
+            ColorSelectorBtn(
+                title: "End",
+                color: selectedPeriodLastColor,
+                showDialogFunction: _showSelectedEndColorDialog),
+          ],
+        ),
+      );
 
   // Block with  information about selected date
   // and boundaries of the selected period.
   Widget _selectedBlock() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text("Selected: $_selectedDate"),
-        ),
-        _selectedPeriod != null
-            ? Column(children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
-                  child: Text("Selected period boundaries:"),
-                ),
-                Text(_selectedPeriod!.start.toString()),
-                Text(_selectedPeriod!.end.toString()),
-              ])
-            : Container()
-      ],
-    );
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text("Selected: $_selectedDate"),
+          ),
+          _selectedPeriod != null
+              ? Column(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 4.0),
+                    child: Text("Selected period boundaries:"),
+                  ),
+                  Text(_selectedPeriod!.start.toString()),
+                  Text(_selectedPeriod!.end.toString()),
+                ])
+              : Container()
+        ],
+      );
 
   // select background color for the first date of the selected period
   void _showSelectedStartColorDialog() async {
@@ -198,24 +225,22 @@ class _WeekPickerPageState extends State<WeekPickerPage> {
     });
   }
 
-  void _onSelectionError(Object e){
+  void _onSelectionError(Object e) {
     if (e is UnselectablePeriodException) print("catch error: $e");
   }
 
 // ignore: prefer_expression_function_bodies
-  bool _isSelectableCustom (DateTime day) {
+  bool _isSelectableCustom(DateTime day) {
 //    return day.weekday < 6;
-    return day.day != DateTime.now().add(Duration(days: 7)).day ;
+    return day.day != DateTime.now().add(Duration(days: 7)).day;
   }
 
   EventDecoration? _eventDecorationBuilder(DateTime date) {
-    List<DateTime> eventsDates = widget.events
-        .map<DateTime>((Event e) => e.date)
-        .toList();
+    List<DateTime> eventsDates =
+        widget.events.map<DateTime>((e) => e.date).toList();
 
-    bool isEventDate = eventsDates.any((DateTime d) => date.year == d.year
-        && date.month == d.month
-        && d.day == date.day);
+    bool isEventDate = eventsDates.any((d) =>
+        date.year == d.year && date.month == d.month && d.day == date.day);
 
     if (!isEventDate) return null;
 
@@ -224,13 +249,10 @@ class _WeekPickerPageState extends State<WeekPickerPage> {
         border: Border.all(
           color: Colors.blue,
         ),
-        borderRadius: BorderRadius.all(Radius.circular(3.0))
-    );
+        borderRadius: BorderRadius.all(Radius.circular(3.0)));
 
-    TextStyle? whiteText = Theme.of(context)
-        .textTheme
-        .bodyText2
-        ?.copyWith(color: Colors.white);
+    TextStyle? whiteText =
+        Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white);
 
     return isEventDate
         ? EventDecoration(boxDecoration: roundedBorder, textStyle: whiteText)
