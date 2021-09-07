@@ -85,13 +85,12 @@ class WeekPicker1 extends StatefulWidget {
             || !initiallyShowDate.isBefore(firstDate)),
         super(key: key);
 
-
-
   @override
   _WeekPicker1State createState() => _WeekPicker1State();
 }
 
 class _WeekPicker1State extends State<WeekPicker1> {
+
   @override
   Widget build(BuildContext context) {
     MaterialLocalizations localizations = MaterialLocalizations.of(context);
